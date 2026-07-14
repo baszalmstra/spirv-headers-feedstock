@@ -14,25 +14,28 @@ source:
 
 build:
   number: 1
+  script:
+    interpreter: brush
+    content: |
+      install_prefix="${LIBRARY_PREFIX:-$PREFIX}"
+      cmake ${CMAKE_ARGS:-} -G Ninja -S . -B build \
+        -D CMAKE_BUILD_TYPE=Release \
+        -D "CMAKE_INSTALL_PREFIX=$install_prefix"
+      cmake --build build --parallel "${CPU_COUNT:-1}"
+      cmake --install build
 
 requirements:
   build:
     - ${{ compiler('cxx') }}
     - ${{ stdlib("c") }}
+    - brush
     - cmake
-    - if: unix
-      then: make
-    - if: win
-      then: ninja
-  host:
-  run:
+    - ninja
 
 tests:
-  - script:
-      - if: unix
-        then: test -f ${PREFIX}/include/spirv/1.2/spirv.h
-      - if: win
-        then: if not exist %LIBRARY_INC%\\spirv\\1.2\\spirv.h exit 1
+  - package_contents:
+      include:
+        - spirv/1.2/spirv.h
 
 about:
   license: BSD-3-Clause
