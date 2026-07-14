@@ -1,0 +1,48 @@
+schema_version: 1
+
+context:
+  name: spirv-headers
+  version: "1.4.350.1"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  - url: https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-${{ version }}.tar.gz
+    sha256: 9e6d5c78878172d2b810e97f3a74ecbbb14b4ad52b07384ce915fbbeb226d610
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib("c") }}
+    - cmake
+    - if: unix
+      then: make
+    - if: win
+      then: ninja
+  host:
+  run:
+
+tests:
+  - script:
+      - if: unix
+        then: test -f ${PREFIX}/include/spirv/1.2/spirv.h
+      - if: win
+        then: if not exist %LIBRARY_INC%\\spirv\\1.2\\spirv.h exit 1
+
+about:
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: Machine-readable files for the SPIR-V Registry
+  homepage: https://github.com/KhronosGroup/SPIRV-Headers
+
+extra:
+  recipe-maintainers:
+    - JarrettSJohnson
+    - oleksandr-pavlyk
+    - ZzEeKkAa
+    - isuruf
