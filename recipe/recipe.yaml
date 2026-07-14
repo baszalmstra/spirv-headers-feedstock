@@ -14,16 +14,13 @@ source:
 
 build:
   number: 1
+  noarch: generic
   script:
-    - if: win
-      then: |
-        cmake %CMAKE_ARGS% -G Ninja -S . -B build
-        cmake --build build --parallel %CPU_COUNT%
-        cmake --install build
-      else: |
-        cmake ${CMAKE_ARGS} -G Ninja -S . -B build
-        cmake --build build --parallel "${CPU_COUNT}"
-        cmake --install build
+    interpreter: bash
+    content: |
+      cmake ${CMAKE_ARGS} -G Ninja -S . -B build
+      cmake --build build --parallel "${CPU_COUNT}"
+      cmake --install build
 
 requirements:
   build:
@@ -31,6 +28,13 @@ requirements:
     - ${{ stdlib("c") }}
     - cmake
     - ninja
+    - if: win
+      then: m2-bash
+  host:
+  run:
+    - if: win
+      then: __win
+      else: __unix
 
 tests:
   - package_contents:
