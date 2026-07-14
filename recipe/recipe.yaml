@@ -17,10 +17,7 @@ build:
   script:
     interpreter: brush
     content: |
-      install_prefix="${LIBRARY_PREFIX:-$PREFIX}"
-      cmake ${CMAKE_ARGS:-} -G Ninja -S . -B build \
-        -D CMAKE_BUILD_TYPE=Release \
-        -D "CMAKE_INSTALL_PREFIX=$install_prefix"
+      cmake ${CMAKE_ARGS} -G Ninja -S . -B build
       cmake --build build --parallel "${CPU_COUNT:-1}"
       cmake --install build
 
