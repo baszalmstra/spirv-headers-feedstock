@@ -1,6 +1,6 @@
 mkdir build
 cd build
-cmake -GNinja ^
+cmake %CMAKE_ARGS% -GNinja ^
   -DCMAKE_BUILD_TYPE=Release ^
   -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX% ^
   ..
