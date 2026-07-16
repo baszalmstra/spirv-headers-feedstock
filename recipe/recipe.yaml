@@ -39,8 +39,10 @@ requirements:
 
 tests:
   - package_contents:
-      include:
-        - spirv/1.2/spirv.h
+      files:
+        - if: win
+          then: Library/include/spirv/1.2/spirv.h
+          else: include/spirv/1.2/spirv.h
 
 about:
   license: BSD-3-Clause
